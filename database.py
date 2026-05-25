@@ -1,4 +1,8 @@
 import sqlite3
+import os
+
+# créer dossier data si inexistant
+os.makedirs("data", exist_ok=True)
 
 conn = sqlite3.connect("data/bot.db", check_same_thread=False)
 cursor = conn.cursor()
