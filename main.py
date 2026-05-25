@@ -1,4 +1,4 @@
-from telegram import Update
+import asyncio
 from telegram.ext import ApplicationBuilder, CommandHandler, MessageHandler, CallbackQueryHandler, filters
 
 from config import BOT_TOKEN
@@ -9,7 +9,7 @@ from handlers.menu import menu_handler
 from handlers.capture import handle_capture
 from handlers.admin import admin_callback
 
-def main():
+async def run_bot():
 
     init_db()
 
@@ -21,7 +21,16 @@ def main():
     app.add_handler(CallbackQueryHandler(admin_callback))
 
     print("BOT ONLINE")
-    app.run_polling()
+
+    await app.initialize()
+    await app.start()
+    await app.updater.start_polling()
+
+    # garder le bot vivant
+    await asyncio.Event().wait()
+
+def main():
+    asyncio.run(run_bot())
 
 if __name__ == "__main__":
     main()
